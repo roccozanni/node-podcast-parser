@@ -146,6 +146,60 @@ describe('Podcast feed parser', () => {
     });
   });
 
+  it('should parse feedburner feed', function(done) {
+    parse(fixtures['feedburner-example'], (err, data) => {
+      if (err) {
+        return done(err);
+      }
+
+      const podcast = Object.assign({}, data);
+      delete podcast.episodes;
+
+      expect(podcast).to.eql({
+        title: 'All About Everything',
+        description: {
+          short: 'A show about everything',
+          long: 'All About Everything is a show about everything. Each week we dive into any subject known to man and talk about it as much as we can. Look for our podcast in the Podcasts app or in the iTunes Store',
+        },
+        link: 'http://www.example.com/podcasts/everything/index.html',
+        image: 'http://example.com/podcasts/everything/AllAboutEverything.jpg',
+        language: 'en-us',
+        updated: utcDate(2014, 5, 15, 19, 0, 0),
+        author: 'John Doe',
+        owner: {
+          name: 'John Doe',
+          email: 'john.doe@example.com'
+        },
+        explicit: true,
+        categories: [
+          'Technology>Gadgets',
+          'TV & Film',
+        ]
+      });
+
+      expect(data.episodes).to.have.length(3);
+      const firstEpisode = data.episodes[0];
+      delete firstEpisode.description;
+
+      expect(firstEpisode).to.eql({
+        guid: 'http://example.com/podcasts/archive/aae20140615.m4a',
+        title: 'Shake Shake Shake Your Spices',
+        published: utcDate(2014, 5, 15, 19, 0, 0),
+        image: 'http://example.com/podcasts/everything/AllAboutEverything/Episode1.jpg',
+        duration: 424,
+        explicit: false,
+        enclosure: {
+          filesize: 8727310,
+          type: 'audio/x-m4a',
+          url: 'http://feedproxy.google.com/~r/ATCfeed/~5/MRfKy3_dGH4/AllAboutEverythingEpisode3.m4a',
+        },
+        feedburnerOrigEnclosureLink: 'http://example.com/podcasts/everything/AllAboutEverythingEpisode3.m4a',
+      });
+
+      done();
+    });
+  });
+
   it('should parse feed when items have no pubdate', function(done) {
     parse(fixtures['no-pubdate'], (err, data) => {
       if (err) {
@@ -386,6 +440,7 @@ describe('Podcast feed parser', () => {
           type: 'audio/mpeg',
           url: 'http://feedproxy.google.com/~r/se-radio/~5/_V8a9ATpdxk/SE-Radio-Episode-248-Axel-Rauschmayer-on-JavaScript-and-ECMAScript-6.mp3'
         },
+        feedburnerOrigEnclosureLink: "http://traffic.libsyn.com/seradio/SE-Radio-Episode-248-Axel-Rauschmayer-on-JavaScript-and-ECMAScript-6.mp3",
         explicit: false,
         categories: [
           'Episodes',
