@@ -2,7 +2,7 @@
   "name": "node-podcast-parser",
   "description": "Parse podcast feeds into objects",
   "version": "2.3.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "build": "babel src/index.js --out-file index.js",
     "prepublish": "npm run build && npm run test",
