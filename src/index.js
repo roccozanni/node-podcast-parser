@@ -108,6 +108,7 @@ module.exports = function parse(feedXML, callback) {
         'itunes:season': 'season',
         'itunes:episode': 'episode',
         'itunes:episodeType': 'episodeType',
+        'feedburner:origEnclosureLink': 'feedburnerOrigEnclosureLink',
       };
     } else if (tmpEpisode) {
       // Episode specific attributes
